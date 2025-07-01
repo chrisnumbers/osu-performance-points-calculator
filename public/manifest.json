@@ -16,5 +16,14 @@
         "resources": ["static/js/*.js", "static/css/*.css", "index.html", "asset-manifest.json"],
         "matches": ["https://osu.ppy.sh/*"]
       }
-    ]
+    ],
+    
+    "icons": {
+      "16": "images/pp.png",
+      "32": "images/pp.png",
+      "48": "images/pp.png",
+      "128": "images/pp.png"
+    }
+  
 }
+

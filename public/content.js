@@ -4,9 +4,18 @@ async function loadReact() {
         const manifest = await fetch(chrome.runtime.getURL("asset-manifest.json"))
         const manifestJSON = await manifest.json()
         const mainJSPath = manifestJSON.files["main.js"]
+        const mainCSSPath = manifestJSON.files["main.css"]
+
+        if (mainCSSPath) {
+            console.log("Loading CSS")
+            const link = document.createElement("link");
+            link.href = chrome.runtime.getURL(mainCSSPath);
+            link.rel = "stylesheet";
+            document.head.appendChild(link);
+        }
 
         if (mainJSPath) {
-            console.log("Manifest exists, loading script...")
+            console.log("Loading JS script")
             const script = document.createElement('script')
             script.src = chrome.runtime.getURL(mainJSPath) //location for react after build
             script.type = 'text/javascript';
@@ -48,9 +57,26 @@ function renderPPCounter(beatmap_info) {
     loadReact()
 }
 
+// if (document.readyState === 'loading') {
+//     document.addEventListener('DOMContentLoaded', () => renderPPCounter(document.querySelector('.beatmapset-info')));
+// } else {
+// renderPPCounter(document.querySelector('.beatmapset-info'));
+// }
+
+function waitForElementLoad() {
+    const startTime = Date.now()
+
+    const checkIfExists = setInterval(() => {
+        const beatmap_info = document.querySelector('.beatmapset-info')
+        if (beatmap_info) {
+            clearInterval(checkIfExists)
+            renderPPCounter(beatmap_info)
+        } else if (Date.now() - startTime > 5000) {
+            clearInterval(checkIfExists)
+            console.log("Timed out after 5000ms, couldn't find beatmapset-info")
+        } 
+    }, 100)
+} 
+
 console.log("[osu-pp-extension] content script loaded");
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => renderPPCounter(document.querySelector('.beatmapset-info')));
-} else {
-renderPPCounter(document.querySelector('.beatmapset-info'));
-}
+waitForElementLoad()
