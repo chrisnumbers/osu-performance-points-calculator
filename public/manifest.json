@@ -1,29 +1,32 @@
 {
-    "name": "Osu Performance Points Calculator",
-    "description": "Takes the current map on the page and gives an interactive screen to see how map mods affect the performance points of the map.",
-    "version": "0.1",
-    "manifest_version": 3,
-    "content_scripts": [{
-        "js": ["content.js"],
-        "matches": [
-            "https://osu.ppy.sh/beatmapsets/*"
-        ],
-        "run_at": "document_idle"
-      }
-      ],
-    "web_accessible_resources": [
-      {
-        "resources": ["static/js/*.js", "static/css/*.css", "index.html", "asset-manifest.json"],
-        "matches": ["https://osu.ppy.sh/*"]
-      }
-    ],
-    
-    "icons": {
-      "16": "images/pp.png",
-      "32": "images/pp.png",
-      "48": "images/pp.png",
-      "128": "images/pp.png"
+  "name": "Osu Performance Points Calculator",
+  "description": "Takes the current map on the page and gives an interactive screen to see how map mods affect the performance points of the map.",
+  "version": "0.1",
+  "manifest_version": 3,
+  "content_scripts": [
+    {
+      "js": ["content.js"],
+      "matches": ["https://osu.ppy.sh/beatmapsets/*"],
+      "run_at": "document_idle"
     }
-  
-}
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "static/js/*.js",
+        "static/css/*.css",
+        "index.html",
+        "asset-manifest.json",
+        "images/*.png"
+      ],
+      "matches": ["https://osu.ppy.sh/*"]
+    }
+  ],
 
+  "icons": {
+    "16": "images/pp.png",
+    "32": "images/pp.png",
+    "48": "images/pp.png",
+    "128": "images/pp.png"
+  }
+}
