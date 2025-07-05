@@ -3,7 +3,7 @@ import { useState } from "react";
 
 function App() {
   const [pp, setPp] = useState(100);
-  const [selectedMods, setSelectedMods] = useState([]);
+  const [selectedMods, setSelectedMods] = useState(["nomod"]);
 
   const toggleMod = (mod) => {
     setSelectedMods((prev) =>
@@ -19,7 +19,7 @@ function App() {
           <ModMenu selectedMods={selectedMods} toggleMod={toggleMod} />
         </div>
         <div className="w-full md:w-1/2">
-          <AccuracyMenu accuracies={accuracies} />
+          <AccuracyMenu accuracies={accuracies} pp={pp} />
         </div>
       </div>
     </div>
@@ -30,7 +30,7 @@ function Title() {
   return (
     <div className="flex items-center gap-3 mb-6">
       <div className="w-10 h-10 bg-pink-500 rounded-full flex items-center justify-center font-bold text-base text-white">
-        PP
+        osu!
       </div>
       <h3 className="text-4xl font-bold text-pink-400">
         Performance Points Calculator
@@ -86,14 +86,23 @@ function ModButton({ mod, selected, onToggle }) {
 const accuracies = [100, 99, 98, 97];
 function AccuracyMenu({ pp }) {
   return (
-    <div className="flex flex-col gap-2 ml-6">
+    <div className="grid grid-cols-2 gap-4 ml-6">
       {accuracies.map((acc) => {
-        // Simulated PP drop per percent (you can replace this logic later)
-        const adjustedPp = Math.round(pp * (acc / 100));
+        const adjustedPP = Math.round(pp * (acc / 100));
 
         return (
-          <div key={acc} className="text-sm font-medium text-gray-700">
-            {acc}%: <span className="font-semibold text-pink-500">{pp} pp</span>
+          // <div key={acc} className="text-sm font-medium text-gray-700">
+          //   {acc}%: <span className="font-semibold text-pink-500">{adjustedPp} pp</span>
+          // </div>
+          <div
+            key={acc}
+            className="flex flex-col items-center justify-center p-4 rounded-lg border border-gray-300 shadow-sm bg-[##222527] text-white"
+          >
+            <div className="text-lg text-white font-medium">{acc}%</div>
+            <div className="text-4xl font-bold text-pink-400 leading-tight">
+              {adjustedPP}
+              <span className="text-lg font-semibold ml-1">pp</span>
+            </div>
           </div>
         );
       })}

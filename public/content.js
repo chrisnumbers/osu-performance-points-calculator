@@ -75,5 +75,18 @@ function waitForElementLoad() {
   }, 100);
 }
 
+const mods = [
+  "nomod",
+  "hardrock",
+  "doubletime",
+  "hidden",
+  "flashlight",
+  "easy",
+  "nofail",
+  "spunout",
+  "halftime",
+];
+
+const modIcons = {};
 console.log("[osu-pp-extension] content script loaded");
 waitForElementLoad();
