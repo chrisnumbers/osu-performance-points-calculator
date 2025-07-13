@@ -7,14 +7,20 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^13.5.0",
+    "osu-classes": "^3.1.0",
+    "osu-parsers": "^4.1.7",
+    "osu-standard-stable": "^5.0.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-scripts": "5.0.1",
+    "rosu-pp-js": "https://github.com/MaxOhn/rosu-pp-js/releases/download/v3.1.0/rosu_pp_js_web.tar.gz",
+    "util": "^0.12.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "postbuild": "copy node_modules\\rosu-pp-js\\rosu_pp_js_bg.wasm build\\static\\js\\",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

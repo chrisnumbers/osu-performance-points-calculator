@@ -1,3 +1,17 @@
+// import init, { Performance, Beatmap, GameMode } from "rosu-pp-js";
+// import * as rosu from "rosu-pp-js";
+// const beatmapID = window.location.hash.split("/").pop();
+// const response = await fetch(`https://osu.ppy.sh/osu/${beatmapID}`);
+
+// beatmap.convert(GameMode.Osu);
+// const diff = new Difficulty({ mods: mods.join("") });
+// // const beatmapData = await response.text()
+
+// const beatmap = new Beatmap(beatmapData);
+// const performance = new Performance({
+//   mods,
+// });
+
 async function loadReact() {
   try {
     console.log("Loading manifest...");
@@ -87,6 +101,15 @@ const mods = [
   "halftime",
 ];
 
-const modIcons = {};
+// async function initializeWASM() {
+//   console.log("initializing...");
+//   await init(chrome.runtime.getURL("rosu_pp_js_bg.wasm"));
+//   console.log("initialized!");
+//   waitForElementLoad();
+// }
+// console.log("init is", typeof init);
 console.log("[osu-pp-extension] content script loaded");
+// initializeWASM();
 waitForElementLoad();
+
+chrome.runtime.getURL("rosu_pp_js_bg.wasm");

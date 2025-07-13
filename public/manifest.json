@@ -7,7 +7,8 @@
     {
       "js": ["content.js"],
       "matches": ["https://osu.ppy.sh/beatmapsets/*"],
-      "run_at": "document_idle"
+      "run_at": "document_idle",
+      "type": "module"
     }
   ],
   "web_accessible_resources": [
@@ -17,7 +18,8 @@
         "static/css/*.css",
         "index.html",
         "asset-manifest.json",
-        "images/*.png"
+        "images/*.png",
+        "static/js/rosu_pp_js_bg.wasm"
       ],
       "matches": ["https://osu.ppy.sh/*"]
     }
