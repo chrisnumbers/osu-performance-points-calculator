@@ -221,33 +221,38 @@ function AccuracyMenu({ selectedMods }) {
 
       const difficultyAttributes = difficultyCalculator.calculate();
       let ppResults = [];
+      accuracies.map((acc) => {
+        const accDecimal = (acc / 100).toFixed(2);
+        const score = new ScoreInfo({
+          maxCombo: standardBeatMap.maxCombo,
+          rulesetId: 0,
+          mods: modsRuleset,
+          count300: Math.round(standardBeatMap.hitObjects.length * accDecimal),
+          count100: Math.round(
+            standardBeatMap.hitObjects.length * (1 - accDecimal)
+          ),
+          count50: 0,
+          countMiss: 0,
+        });
+        const accuracyCalculation =
+          (score.count300 + score.count100 / 3 + score.count50 / 6) /
+          (score.count300 + score.count100 + score.count50 + score.countMiss);
+        score.accuracy = accuracyCalculation;
+        console.log(`Accuracy: ${accuracyCalculation}`);
 
-      const score = new ScoreInfo({
-        maxCombo: standardBeatMap.maxCombo,
-        rulesetId: 0,
-        mods: modsRuleset,
-        count300: Math.round(standardBeatMap.hitObjects.length * 0.99),
-        count100: Math.round(standardBeatMap.hitObjects.length * 0.01),
-        count50: 0,
-        countMiss: 0,
+        const performanceCalculator = ruleset.createPerformanceCalculator(
+          difficultyAttributes,
+          score
+        );
+        const performanceAttributes =
+          performanceCalculator.calculateAttributes();
+        ppResults.push(performanceAttributes.totalPerformance);
       });
-      const accuracyCalculation =
-        (score.count300 + score.count100 / 3 + score.count50 / 6) /
-        (score.count300 + score.count100 + score.count50 + score.countMiss);
-      score.accuracy = accuracyCalculation;
-      console.log(`Accuracy: ${accuracyCalculation}`);
 
-      const performanceCalculator = ruleset.createPerformanceCalculator(
-        difficultyAttributes,
-        score
-      );
-      const performanceAttributes = performanceCalculator.calculateAttributes();
-      ppResults.push(performanceAttributes.totalPerformance);
-
-      setPPVals([ppResults]);
+      setPPVals(ppResults);
     };
     getPPResults();
-  }, []);
+  }, [selectedMods]);
 
   return (
     <div className="grid grid-cols-2 gap-4 ml-6">
