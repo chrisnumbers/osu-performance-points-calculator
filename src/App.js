@@ -7,7 +7,7 @@ import { ScoreInfo } from "osu-classes";
 // console.log("init is", typeof init);
 
 function App() {
-  const [selectedMods, setSelectedMods] = useState(["nomod"]);
+  const [selectedMods, setSelectedMods] = useState(["NM"]);
 
   // useEffect(() => {
   //   const initialize = async () => {
@@ -19,8 +19,42 @@ function App() {
   // }, []);
 
   const toggleMod = (mod) => {
-    setSelectedMods((prev) =>
-      prev.includes(mod) ? prev.filter((m) => m !== mod) : [...prev, mod]
+    setSelectedMods(
+      (prevMods) => {
+        if (mod === "NM") {
+          return ["NM"];
+        }
+        // Handling for mods that don't work together.
+        if (mod === "HR" && prevMods.includes("EZ")) {
+          const newMods = [...prevMods, "HR"];
+          return newMods.filter((m) => m !== "EZ");
+        }
+        if (mod === "EZ" && prevMods.includes("HR")) {
+          const newMods = [...prevMods, "EZ"];
+          return newMods.filter((m) => m !== "HR");
+        }
+        if (mod === "DT" && prevMods.includes("HT")) {
+          const newMods = [...prevMods, "DT"];
+          return newMods.filter((m) => m !== "HT");
+        }
+        if (mod === "HT" && prevMods.includes("DT")) {
+          const newMods = [...prevMods, "HT"];
+          return newMods.filter((m) => m !== "DT");
+        }
+
+        // Mod handling for mods that do work together
+        if (prevMods.includes(mod)) {
+          const newMods = prevMods.filter((m) => m !== mod);
+          return newMods.length === 0 ? ["NM"] : newMods;
+        } else {
+          const newMods = [...prevMods, mod];
+          return newMods.includes("NM")
+            ? newMods.filter((m) => m !== "NM")
+            : newMods;
+        }
+      }
+
+      // prev.includes(mod) ? prev.filter((m) => m !== mod) : [...prev, mod]
     );
   };
 
@@ -52,7 +86,7 @@ function Title() {
   );
 }
 
-const mods = ["NM", "HR", "DT", "HD", "FL", "EZ", "NF", "SO", "HT"];
+const mods = ["NM", "HR", "DT", "HD", "FL", "NF", "EZ", "HT", "SO"];
 // const mods = [
 //   "nomod",
 //   "hardrock",
@@ -169,6 +203,7 @@ function AccuracyMenu({ selectedMods }) {
       if (!selectedMods.includes("NM") && selectedMods.length !== 1) {
         mods = selectedMods.join("");
       }
+
       const modsRuleset = ruleset.createModCombination(mods);
       let standardBeatMap;
       if (mods == "") {
@@ -185,9 +220,9 @@ function AccuracyMenu({ selectedMods }) {
         ruleset.createDifficultyCalculator(standardBeatMap);
 
       const difficultyAttributes = difficultyCalculator.calculate();
+      let ppResults = [];
 
       const score = new ScoreInfo({
-        accuracy: 0.99,
         maxCombo: standardBeatMap.maxCombo,
         rulesetId: 0,
         mods: modsRuleset,
@@ -207,7 +242,9 @@ function AccuracyMenu({ selectedMods }) {
         score
       );
       const performanceAttributes = performanceCalculator.calculateAttributes();
-      setPPVals([performanceAttributes.totalPerformance]);
+      ppResults.push(performanceAttributes.totalPerformance);
+
+      setPPVals([ppResults]);
     };
     getPPResults();
   }, []);
@@ -226,7 +263,7 @@ function AccuracyMenu({ selectedMods }) {
             <div className="text-lg text-white font-medium">{acc}%</div>
             {ppVals.length !== 0 ? (
               <div className="text-4xl font-bold text-pink-400 leading-tight">
-                {ppVals[0]}
+                {Math.round(ppVals[i])}
                 <span className="text-lg font-semibold ml-1">pp</span>
               </div>
             ) : (
