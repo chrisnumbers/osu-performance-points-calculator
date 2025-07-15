@@ -126,7 +126,7 @@ function AccuracyMenu({ selectedMods }) {
 
       const ruleset = new StandardRuleset();
       let mods = "";
-      if (!selectedMods.includes("NM") && selectedMods.length !== 1) {
+      if (!selectedMods.includes("NM")) {
         mods = selectedMods.join("");
       }
 
