@@ -3,59 +3,44 @@ import { useRef, useEffect, useState } from "react";
 import { BeatmapDecoder } from "osu-parsers";
 import { StandardRuleset } from "osu-standard-stable";
 import { ScoreInfo } from "osu-classes";
-// import { initWasm. Beatmap, GameMode, Performance } from "rosu-pp-js/web";
-// console.log("init is", typeof init);
 
 function App() {
   const [selectedMods, setSelectedMods] = useState(["NM"]);
 
-  // useEffect(() => {
-  //   const initialize = async () => {
-  //     console.log("initializing wasm....");
-  //     await initWasm(fetch(chrome.runtime.getURL("static/rosu_pp_js_bg.wasm")));
-  //     console.log("WASM initialized");
-  //   };
-  //   initialize();
-  // }, []);
-
   const toggleMod = (mod) => {
-    setSelectedMods(
-      (prevMods) => {
-        if (mod === "NM") {
-          return ["NM"];
-        }
-        // Handling for mods that don't work together.
-        if (mod === "HR" && prevMods.includes("EZ")) {
-          const newMods = [...prevMods, "HR"];
-          return newMods.filter((m) => m !== "EZ");
-        }
-        if (mod === "EZ" && prevMods.includes("HR")) {
-          const newMods = [...prevMods, "EZ"];
-          return newMods.filter((m) => m !== "HR");
-        }
-        if (mod === "DT" && prevMods.includes("HT")) {
-          const newMods = [...prevMods, "DT"];
-          return newMods.filter((m) => m !== "HT");
-        }
-        if (mod === "HT" && prevMods.includes("DT")) {
-          const newMods = [...prevMods, "HT"];
-          return newMods.filter((m) => m !== "DT");
-        }
-
-        // Mod handling for mods that do work together
-        if (prevMods.includes(mod)) {
-          const newMods = prevMods.filter((m) => m !== mod);
-          return newMods.length === 0 ? ["NM"] : newMods;
-        } else {
-          const newMods = [...prevMods, mod];
-          return newMods.includes("NM")
-            ? newMods.filter((m) => m !== "NM")
-            : newMods;
-        }
+    setSelectedMods((prevMods) => {
+      if (mod === "NM") {
+        return ["NM"];
+      }
+      // Handling for mods that don't work together.
+      if (mod === "HR" && prevMods.includes("EZ")) {
+        const newMods = [...prevMods, "HR"];
+        return newMods.filter((m) => m !== "EZ");
+      }
+      if (mod === "EZ" && prevMods.includes("HR")) {
+        const newMods = [...prevMods, "EZ"];
+        return newMods.filter((m) => m !== "HR");
+      }
+      if (mod === "DT" && prevMods.includes("HT")) {
+        const newMods = [...prevMods, "DT"];
+        return newMods.filter((m) => m !== "HT");
+      }
+      if (mod === "HT" && prevMods.includes("DT")) {
+        const newMods = [...prevMods, "HT"];
+        return newMods.filter((m) => m !== "DT");
       }
 
-      // prev.includes(mod) ? prev.filter((m) => m !== mod) : [...prev, mod]
-    );
+      // Mod handling for mods that do work together
+      if (prevMods.includes(mod)) {
+        const newMods = prevMods.filter((m) => m !== mod);
+        return newMods.length === 0 ? ["NM"] : newMods;
+      } else {
+        const newMods = [...prevMods, mod];
+        return newMods.includes("NM")
+          ? newMods.filter((m) => m !== "NM")
+          : newMods;
+      }
+    });
   };
 
   return (
@@ -87,17 +72,6 @@ function Title() {
 }
 
 const mods = ["NM", "HR", "DT", "HD", "FL", "NF", "EZ", "HT", "SO"];
-// const mods = [
-//   "nomod",
-//   "hardrock",
-//   "doubletime",
-//   "hidden",
-//   "flashlight",
-//   "easy",
-//   "nofail",
-//   "spunout",
-//   "halftime",
-// ];
 function ModMenu({ selectedMods, toggleMod }) {
   return (
     <div className="grid grid-cols-5 gap-3">
@@ -132,71 +106,23 @@ function ModButton({ mod, selected, onToggle }) {
 const accuracies = [100, 99, 98, 97];
 function AccuracyMenu({ selectedMods }) {
   const [ppVals, setPPVals] = useState([]);
-  // const [loading, setLoading] = useState(true);
-  // const initialized = useRef(false);
-
-  // useEffect(() => {
-  //   const getPPResults = async () => {
-  //     //initialize for rosu if it isn't already
-  //     try {
-  //       const beatmapID = window.location.hash.split("/").pop();
-  //       console.log("downloading beatmap...");
-  //       const response = await fetch(`https://osu.ppy.sh/osu/${beatmapID}`);
-  //       console.log("Downloaded");
-  //       const text = await response.text();
-  //       console.log("Got text");
-  //       const map = new rosu.Beatmap(text);
-  //       console.log("Map created");
-  //       map.convert(rosu.GameMode.Osu);
-
-  //       if (map.isSuspicious()) {
-  //         console.log("Sus map");
-  //         return;
-  //       }
-  //       let mods = "";
-  //       if (!selectedMods.includes("NM") && selectedMods.length !== 1) {
-  //         mods = selectedMods.join("");
-  //       }
-  //       // if (selectedMods.includes("NM") && selectedMods.length === 1) {
-  //       //   mods = "";
-  //       // } else {
-  //       //   mods = selectedMods.join("");
-  //       // }
-  //       console.log("Calculating Max PP");
-  //       const maxAttrs = new rosu.Performance({ mods: mods }).calculate(map);
-  //       let ppResults = [];
-  //       ppResults.push(maxAttrs.pp);
-
-  //       for (let i = 1; i < accuracies.length; i++) {
-  //         console.log("Loop 1");
-  //         const newAttrs = new rosu.Performance({
-  //           mods: mods,
-  //           accuracy: accuracies[i],
-  //         }).calculate(maxAttrs);
-  //         ppResults.push(newAttrs.pp);
-  //       }
-  //       setPPVals(ppResults);
-  //       map.free();
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-
-  //     // setLoading(false);
-  //   };
-
-  //   getPPResults();
-  // }, []);
+  const cachedBeatMapID = useRef(null);
+  const parsedBeatMap = useRef(null);
 
   useEffect(() => {
     const getPPResults = async () => {
       //Getting beatmap and decoding
       const beatmapID = window.location.hash.split("/").pop();
-      console.log("downloading beatmap...");
-      const response = await fetch(`https://osu.ppy.sh/osu/${beatmapID}`);
-      console.log("Downloaded");
-      const text = await response.text();
-      const decoder = new BeatmapDecoder();
-      const parsedBeatMap = decoder.decodeFromString(text);
+      if (beatmapID !== cachedBeatMapID.current) {
+        console.log("downloading beatmap...");
+        const response = await fetch(`https://osu.ppy.sh/osu/${beatmapID}`);
+        console.log("Downloaded");
+        const text = await response.text();
+        const decoder = new BeatmapDecoder();
+        // const parsedBeatMap = decoder.decodeFromString(text);
+        cachedBeatMapID.current = beatmapID;
+        parsedBeatMap.current = decoder.decodeFromString(text);
+      }
 
       const ruleset = new StandardRuleset();
       let mods = "";
@@ -207,10 +133,10 @@ function AccuracyMenu({ selectedMods }) {
       const modsRuleset = ruleset.createModCombination(mods);
       let standardBeatMap;
       if (mods == "") {
-        standardBeatMap = ruleset.applyToBeatmap(parsedBeatMap);
+        standardBeatMap = ruleset.applyToBeatmap(parsedBeatMap.current);
       } else {
         standardBeatMap = ruleset.applyToBeatmapWithMods(
-          parsedBeatMap,
+          parsedBeatMap.current,
           modsRuleset
         );
       }
@@ -221,16 +147,20 @@ function AccuracyMenu({ selectedMods }) {
 
       const difficultyAttributes = difficultyCalculator.calculate();
       let ppResults = [];
+
       accuracies.map((acc) => {
-        const accDecimal = (acc / 100).toFixed(2);
+        const accDecimal = parseFloat((acc / 100).toFixed(2));
+        const totalHits = standardBeatMap.hitObjects.length;
+        const countMiss = 0;
+        const count50 = 0;
+        const count300 = Math.round(totalHits * accDecimal);
+
         const score = new ScoreInfo({
           maxCombo: standardBeatMap.maxCombo,
           rulesetId: 0,
           mods: modsRuleset,
-          count300: Math.round(standardBeatMap.hitObjects.length * accDecimal),
-          count100: Math.round(
-            standardBeatMap.hitObjects.length * (1 - accDecimal)
-          ),
+          count300: count300,
+          count100: totalHits - count300,
           count50: 0,
           countMiss: 0,
         });
