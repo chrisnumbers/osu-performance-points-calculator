@@ -1,17 +1,3 @@
-// import init, { Performance, Beatmap, GameMode } from "rosu-pp-js";
-// import * as rosu from "rosu-pp-js";
-// const beatmapID = window.location.hash.split("/").pop();
-// const response = await fetch(`https://osu.ppy.sh/osu/${beatmapID}`);
-
-// beatmap.convert(GameMode.Osu);
-// const diff = new Difficulty({ mods: mods.join("") });
-// // const beatmapData = await response.text()
-
-// const beatmap = new Beatmap(beatmapData);
-// const performance = new Performance({
-//   mods,
-// });
-
 async function loadReact() {
   try {
     console.log("Loading manifest...");
@@ -58,21 +44,8 @@ function renderPPCounter(beatmap_info) {
   console.log("Inserting div element...");
   beatmap_info.insertAdjacentElement("afterend", container);
 
-  // const script = document.createElement('script')
-  // script.src = chrome.runtime.getURL('static/js/main.js') //location for react after build
-  // script.type = 'text/javascript';
-  // script.onload = () => {
-  //     console.log("osu pp extensikon react bundle loaded")
-  // };
-  // document.body.appendChild(script);
   loadReact();
 }
-
-// if (document.readyState === 'loading') {
-//     document.addEventListener('DOMContentLoaded', () => renderPPCounter(document.querySelector('.beatmapset-info')));
-// } else {
-// renderPPCounter(document.querySelector('.beatmapset-info'));
-// }
 
 function waitForElementLoad() {
   const startTime = Date.now();
