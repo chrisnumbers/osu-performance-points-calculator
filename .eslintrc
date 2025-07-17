@@ -1,5 +1,6 @@
 {
   "env": {
-    "webextensions": true
+    "webextensions": true,
+    "es6": true
   }
 }

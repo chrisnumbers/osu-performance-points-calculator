@@ -74,15 +74,19 @@ const mods = [
   "halftime",
 ];
 
-// async function initializeWASM() {
-//   console.log("initializing...");
-//   await init(chrome.runtime.getURL("rosu_pp_js_bg.wasm"));
-//   console.log("initialized!");
-//   waitForElementLoad();
-// }
-// console.log("init is", typeof init);
-console.log("[osu-pp-extension] content script loaded");
-// initializeWASM();
-waitForElementLoad();
+let currentURL = window.location.href;
+function runExtensionSetup() {
+  console.log(`[osu-pp-extension] content script loaded at ${currentURL}`);
+  waitForElementLoad();
+}
 
-chrome.runtime.getURL("rosu_pp_js_bg.wasm");
+chrome.runtime.onMessage.addListener((message) => {
+  if (message.type === "URL_UPDATE") {
+    handlePageLoad(message.url);
+  }
+});
+
+function handlePageLoad(url) {
+  console.log("Page fully loaded:", url);
+  waitForElementLoad();
+}

@@ -3,6 +3,8 @@
   "description": "Takes the current map on the page and gives an interactive screen to see how map mods affect the performance points of the map.",
   "version": "0.1",
   "manifest_version": 3,
+  "permissions": ["activeTab", "webNavigation"],
+  "background": { "service_worker": "background.js" },
   "content_scripts": [
     {
       "js": ["content.js"],
@@ -18,8 +20,7 @@
         "static/css/*.css",
         "index.html",
         "asset-manifest.json",
-        "images/*.png",
-        "static/js/rosu_pp_js_bg.wasm"
+        "images/*.png"
       ],
       "matches": ["https://osu.ppy.sh/*"]
     }
