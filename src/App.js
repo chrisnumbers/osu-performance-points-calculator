@@ -111,15 +111,11 @@ function AccuracyMenu({ selectedMods }) {
 
   useEffect(() => {
     const getPPResults = async () => {
-      //Getting beatmap and decoding
       const beatmapID = window.location.hash.split("/").pop();
       if (beatmapID !== cachedBeatMapID.current) {
-        console.log("downloading beatmap...");
         const response = await fetch(`https://osu.ppy.sh/osu/${beatmapID}`);
-        console.log("Downloaded");
         const text = await response.text();
         const decoder = new BeatmapDecoder();
-        // const parsedBeatMap = decoder.decodeFromString(text);
         cachedBeatMapID.current = beatmapID;
         parsedBeatMap.current = decoder.decodeFromString(text);
       }
@@ -141,7 +137,6 @@ function AccuracyMenu({ selectedMods }) {
         );
       }
 
-      console.log("Calculating performance points...");
       const difficultyCalculator =
         ruleset.createDifficultyCalculator(standardBeatMap);
 
@@ -167,8 +162,7 @@ function AccuracyMenu({ selectedMods }) {
         const accuracyCalculation =
           (score.count300 + score.count100 / 3 + score.count50 / 6) /
           (score.count300 + score.count100 + score.count50 + score.countMiss);
-        score.accuracy = accuracyCalculation;
-        console.log(`Accuracy: ${accuracyCalculation}`);
+        score.accuracy = acc;
 
         const performanceCalculator = ruleset.createPerformanceCalculator(
           difficultyAttributes,
@@ -188,9 +182,6 @@ function AccuracyMenu({ selectedMods }) {
     <div className="grid grid-cols-2 gap-4 ml-6">
       {accuracies.map((acc, i) => {
         return (
-          // <div key={acc} className="text-sm font-medium text-gray-700">
-          //   {acc}%: <span className="font-semibold text-pink-500">{adjustedPp} pp</span>
-          // </div>
           <div
             key={acc}
             className="flex flex-col items-center justify-center p-4 rounded-lg border border-gray-300 shadow-sm bg-[##222527] text-white"
